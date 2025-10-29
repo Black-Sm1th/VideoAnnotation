@@ -1,5 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/components/ConfirmDialog.qml</file>
+        <file>qml/components/CustomButton.qml</file>
+        <file>qml/components/DatePicker.qml</file>
+        <file>qml/components/LoadingDialog.qml</file>
+        <file>qml/components/MessageBox.qml</file>
+        <file>qml/components/MultiLineTextInput.qml</file>
+        <file>qml/components/SingleLineTextInput.qml</file>
+        <file>qml/components/TabSwitcher.qml</file>
     </qresource>
 </RCC>
