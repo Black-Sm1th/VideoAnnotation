@@ -1,20 +1,28 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
+import QtGraphicalEffects 1.0
 
 Rectangle {
     id: customButton
     
     // 可配置属性
-    property int buttonWidth: 120
+    property int buttonWidth: contentRow.width + 20
     property int buttonHeight: 40
     property color borderColor: "#E0E0E0"
-    property color textColor: "#D9000000"
-    property color backgroundColor: "#FFFFFF"
+    property color textColor: "#E5FFFFFF"
+    property color backgroundColor: "#3C7EFF"
     property int fontSize: 16
     property string text: qsTr("按钮")
-    property int borderWidth: 1
+    property string iconSource: ""  // 图标路径，为空则不显示图标
+    property int borderWidth: 0
     property int buttonRadius: 8
     property bool containsMouse: mouseArea.containsMouse
+    property bool enabled: true
+    // 渐变相关属性
+    property bool useGradient: false  // 是否使用渐变背景
+    property color gradientStartColor: "#3C7EFF"
+    property color gradientEndColor: "#572499"
+    property bool animateGradient: false  // 是否动画渐变
     // hover和pressed状态的颜色
     property color hoverBackgroundColor: Qt.lighter(backgroundColor, 1.1)
     property color pressedBackgroundColor: Qt.darker(backgroundColor, 1.1)
@@ -34,63 +42,128 @@ Rectangle {
     
     // 背景样式
     color: {
-        if (mouseArea.pressed) {
-            return pressedBackgroundColor
-        } else if (mouseArea.containsMouse) {
-            return hoverBackgroundColor
-        } else {
-            return backgroundColor
-        }
+        if (!enabled) return "#EBEDF0"
+        if (mouseArea.pressed) return pressedBackgroundColor
+        if (mouseArea.containsMouse) return hoverBackgroundColor
+        return backgroundColor
     }
     
     border.color: {
-        if (mouseArea.pressed) {
-            return pressedBorderColor
-        } else if (mouseArea.containsMouse) {
-            return hoverBorderColor
-        } else {
-            return borderColor
+        if (!enabled) return "transparent"
+        if (mouseArea.pressed) return pressedBorderColor
+        if (mouseArea.containsMouse) return hoverBorderColor
+        return borderColor
+    }
+    
+    border.width: enabled ? borderWidth : 0
+    radius: buttonRadius
+    
+    // 渐变背景层
+    Item {
+        id: gradientLayer
+        anchors.fill: parent
+        visible: useGradient
+        
+        Rectangle {
+            id: gradientRect
+            anchors.fill: parent
+            radius: buttonRadius
+            clip: true
+            
+            gradient: Gradient {
+                orientation: Gradient.Horizontal  // 水平渐变（左到右）
+                GradientStop { 
+                    position: 0.0
+                    color: gradientStartColor 
+                }
+                GradientStop { 
+                    position: 1.0
+                    color: gradientEndColor 
+                }
+            }
+            
+            // 动画光效层（水平移动）
+            Rectangle {
+                id: shineLayer
+                width: parent.width * 2
+                height: parent.height
+                x: animateGradient ? shineAnimation.xPosition : -parent.width
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal  // 水平渐变
+                    GradientStop { position: 0.0; color: "transparent" }
+                    GradientStop { position: 0.4; color: "transparent" }
+                    GradientStop { position: 0.5; color: Qt.rgba(1, 1, 1, 0.2) }
+                    GradientStop { position: 0.6; color: "transparent" }
+                    GradientStop { position: 1.0; color: "transparent" }
+                }
+                
+                SequentialAnimation {
+                    id: shineAnimation
+                    running: animateGradient
+                    loops: Animation.Infinite
+                    property real xPosition: -gradientRect.width
+                    
+                    PauseAnimation { duration: 300 }
+                    NumberAnimation {
+                        target: shineAnimation
+                        property: "xPosition"
+                        from: -gradientRect.width
+                        to: gradientRect.width
+                        duration: 1500
+                        easing.type: Easing.InOutQuad
+                    }
+                    PauseAnimation { duration: 300 }
+                }
+            }
         }
     }
     
-    border.width: borderWidth
-    radius: buttonRadius
-    
-    // 按钮文字
-    Text {
-        id: buttonText
-        text: customButton.text
-        font.pixelSize: fontSize
-        color: {
-            if (mouseArea.pressed) {
-                return pressedTextColor
-            } else if (mouseArea.containsMouse) {
-                return hoverTextColor
-            } else {
+    // 按钮内容（图标+文字）
+    Row {
+        id: contentRow
+        anchors.centerIn: parent
+        spacing: iconSource !== "" ? 8 : 0
+        z: 10  // 确保内容在渐变层上方
+        
+        Image {
+            id: buttonIcon
+            source: iconSource
+            visible: iconSource !== ""
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        
+        Text {
+            id: buttonText
+            text: customButton.text
+            font.pixelSize: fontSize
+            color: {
+                if (!customButton.enabled) return "#73000000"
+                if (mouseArea.pressed) return pressedTextColor
+                if (mouseArea.containsMouse) return hoverTextColor
                 return textColor
             }
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Alibaba PuHuiTi 3.0"
         }
-        anchors.centerIn: parent
-        font.family: "Alibaba PuHuiTi 3.0"
     }
     
     // 鼠标交互区域
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        hoverEnabled: customButton.enabled
+        cursorShape: customButton.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         
         onClicked: {
-            customButton.clicked()
+            if (customButton.enabled) customButton.clicked()
         }
         
         onPressed: {
-            customButton.pressed()
+            if (customButton.enabled) customButton.pressed()
         }
         
         onReleased: {
-            customButton.released()
+            if (customButton.enabled) customButton.released()
         }
     }
     
@@ -120,7 +193,7 @@ Rectangle {
     states: [
         State {
             name: "pressed"
-            when: mouseArea.pressed
+            when: mouseArea.pressed && customButton.enabled
             PropertyChanges {
                 target: customButton
                 scale: 0.98

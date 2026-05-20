@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
+        <file>qml/VideoPlayerPage.qml</file>
         <file>qml/components/ConfirmDialog.qml</file>
         <file>qml/components/CustomButton.qml</file>
         <file>qml/components/DatePicker.qml</file>
@@ -9,5 +10,17 @@
         <file>qml/components/MultiLineTextInput.qml</file>
         <file>qml/components/SingleLineTextInput.qml</file>
         <file>qml/components/TabSwitcher.qml</file>
+        <file>images/titileIcon.png</file>
+        <file>qml/VideoMaterialList.qml</file>
+        <file>fonts/AlibabaPuHuiTi-3-55-Regular.ttf</file>
+        <file>fonts/AlibabaPuHuiTi-3-65-Medium.ttf</file>
+        <file>fonts/AlibabaPuHuiTi-3-85-Bold.ttf</file>
+        <file>qml/HistoryList.qml</file>
+        <file>images/magic.png</file>
+        <file>images/upload.png</file>
+        <file>images/video.png</file>
+        <file>images/delete.png</file>
+        <file>qml/components/ImageButton.qml</file>
+        <file>images/clock.png</file>
     </qresource>
 </RCC>

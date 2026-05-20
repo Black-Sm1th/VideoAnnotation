@@ -4,13 +4,16 @@
 
 TEMPLATE = app
 TARGET = VideoAnnotation
+QT += quick multimedia
 DESTDIR = ../x64/Debug
-CONFIG += debug
+CONFIG += debug c++14
 LIBS += -L"."
 DEPENDPATH += .
 MOC_DIR += .
 OBJECTS_DIR += debug
 UI_DIR += .
 RCC_DIR += .
-SOURCES += ./main.cpp
+HEADERS += ./FileHelper.h
+SOURCES += ./main.cpp \
+           ./FileHelper.cpp
 RESOURCES += qml.qrc
