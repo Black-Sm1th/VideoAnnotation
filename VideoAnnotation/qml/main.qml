@@ -48,7 +48,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         width: 320
         Column{
-            width: 320
+            width: parent.width
             height: parent.height
             VideoMaterialList {
                 width: parent.width
@@ -80,6 +80,9 @@ ApplicationWindow {
         anchors.right: rightPanel.left
         anchors.top: topBar.bottom
         anchors.bottom: parent.bottom
+        VideoPlayer {
+            anchors.fill: parent
+        }
     }
     // VideoPlayerPage {
     //     anchors.fill: parent

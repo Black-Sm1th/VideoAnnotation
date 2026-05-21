@@ -22,5 +22,9 @@
         <file>images/delete.png</file>
         <file>qml/components/ImageButton.qml</file>
         <file>images/clock.png</file>
+        <file>qml/VideoPlayer.qml</file>
+        <file>images/videoEmpty.png</file>
+        <file>images/edit.png</file>
+        <file>qml/components/DropdownSelect.qml</file>
     </qresource>
 </RCC>
