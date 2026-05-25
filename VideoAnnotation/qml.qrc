@@ -26,5 +26,7 @@
         <file>images/videoEmpty.png</file>
         <file>images/edit.png</file>
         <file>qml/components/DropdownSelect.qml</file>
+        <file>qml/VideoLibrary.qml</file>
+        <file>qml/components/TimelineBar.qml</file>
     </qresource>
 </RCC>

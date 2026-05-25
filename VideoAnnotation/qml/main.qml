@@ -13,6 +13,10 @@ ApplicationWindow {
     font.family: "Alibaba PuHuiTi 3.0"
     font.pixelSize: 14
     title: qsTr("内镜手术智能感知系统")
+
+    // 全局共享的视频素材库模型，被左侧列表与中间播放器共用
+    VideoLibrary { id: videoLibrary }
+
     Rectangle{
         id: topBar
         height: 64
@@ -53,6 +57,7 @@ ApplicationWindow {
             VideoMaterialList {
                 width: parent.width
                 height: parent.height * 2 / 3
+                library: videoLibrary
             }
             Rectangle{
                 width: parent.width
@@ -82,6 +87,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         VideoPlayer {
             anchors.fill: parent
+            library: videoLibrary
         }
     }
     // VideoPlayerPage {
