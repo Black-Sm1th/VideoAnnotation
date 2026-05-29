@@ -19,6 +19,7 @@ Item {
     property int itemHeight: 36
     property color borderColor: "transparent"
     property int borderWidth: 0
+    property color chevronColor: "#80000000"
     property int alignment: Qt.AlignHCenter
     property string icon: ""
     property int iconSize: 16
@@ -103,10 +104,15 @@ Item {
                     NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
                 }
 
+                Connections {
+                    target: root
+                    function onChevronColorChanged() { chevron.requestPaint() }
+                }
+
                 onPaint: {
                     var ctx = getContext("2d")
                     ctx.reset()
-                    ctx.strokeStyle = "#80000000"
+                    ctx.strokeStyle = root.chevronColor
                     ctx.lineWidth = 1.5
                     ctx.lineCap = "round"
                     ctx.lineJoin = "round"

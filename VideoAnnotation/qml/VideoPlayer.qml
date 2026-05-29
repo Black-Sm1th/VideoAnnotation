@@ -14,6 +14,27 @@ Column {
     width: parent.width
     height: parent.height
 
+    // 画笔标注工具（背景和器械工具），名称与颜色一一对应
+    property var brushTools: [
+        { name: "背景", color: "#000000" },
+        { name: "抓取器", color: "#F53F3F" },
+        { name: "双极 bipolar", color: "#FF5C26" },
+        { name: "钩 hook", color: "#FF7D00" },
+        { name: "剪刀 scissors", color: "#FFAB00" },
+        { name: "夹子 clipper", color: "#FFE03C" },
+        { name: "冲洗器 irrigator", color: "#C6E83C" },
+        { name: "纱布 gauze", color: "#FFB3C6" }
+    ]
+    readonly property var brushToolNames: brushTools.map(function(t) { return t.name })
+    readonly property var brushToolColors: brushTools.map(function(t) { return t.color })
+
+    // 当前选中的画笔工具索引（下拉框与颜色选择器共用，双向同步）
+    property int brushIndex: 0
+    onBrushIndexChanged: {
+        brushToolSelect.currentIndex = brushIndex
+        brushColorSelect.currentIndex = brushIndex
+    }
+
     // 视频播放器，由共享库的 currentSource 驱动
     MediaPlayer {
         id: player
@@ -294,9 +315,31 @@ Column {
                     color: "#99A1AF"
                     anchors.verticalCenter: parent.verticalCenter
                 }
+                // 工具下拉框：选择背景和器械工具
                 DropdownSelect {
+                    id: brushToolSelect
+                    width: 140
+                    height: parent.height
+                    anchors.verticalCenter: parent.verticalCenter
                     borderWidth: 1
                     borderColor: "#2E2E30"
+                    alignment: Qt.AlignLeft
+                    model: root.brushToolNames
+                    textColor: "#FFFFFF"
+                    chevronColor: "#9A9A9A"
+                    popupBackgroundColor: "#2B2B2B"
+                    popupBorderColor: "#3A3A3A"
+                    hoverColor: "#22FFFFFF"
+                    pressedColor: "#33FFFFFF"
+                    selectedItemColor: "#333C7EFF"
+                    onSelected: function(index, text) { root.brushIndex = index }
+                }
+                // 颜色选择器：平铺一行色块，与工具下拉框同步
+                ColorPickerSelect {
+                    id: brushColorSelect
+                    anchors.verticalCenter: parent.verticalCenter
+                    colors: root.brushToolColors
+                    onSelected: function(index) { root.brushIndex = index }
                 }
             }
         }

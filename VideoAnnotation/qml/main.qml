@@ -77,6 +77,9 @@ ApplicationWindow {
         anchors.top: topBar.bottom
         anchors.bottom: parent.bottom
         width: 320
+        OperationInfo {
+            anchors.fill: parent
+        }
     }
     Rectangle{
         id: midPanel
